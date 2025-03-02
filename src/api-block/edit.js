@@ -29,10 +29,33 @@ import './editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit() {
+
+import { useState, useEffect } from '@wordpress/element'
+
+export default function Edit({ attributes, setAttributes }) {
+	const apiUrl = 'https://catfact.ninja/fact';
+	const { catFact } = attributes;
+
+	useEffect(() => {
+		const fetchCatFact = async () => {
+			try {
+				const response = await fetch(apiUrl);
+				const myJson = await response.json();
+				setAttributes({ catFact: myJson.fact });
+			} catch (error) {
+				console.error('Error fetching cat fact:', error);
+                setAttributes({  catFact: 'no cat fact for u'});
+			}
+		};
+
+		if (!catFact) {
+			fetchCatFact();
+		}
+	}, []);
+
 	return (
 		<p { ...useBlockProps() }>
-			{ __( 'Api Block – hello from the editor!', 'api-block' ) }
+			{ catFact }
 		</p>
 	);
 }

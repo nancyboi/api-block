@@ -28,3 +28,16 @@ function create_block_api_block_block_init() {
 	register_block_type( __DIR__ . '/build/api-block' );
 }
 add_action( 'init', 'create_block_api_block_block_init' );
+
+function enqueue_cat_fact_script(){
+	wp_enqueue_script(
+		'cat-fact-script',
+		plugin_dir_url(__FILE__) . 'random-cat-fact.js',
+		array(),
+		null,
+		true
+	);
+}
+
+add_action('wp_enqueue_scripts', 'enqueue_cat_fact_script');
+
